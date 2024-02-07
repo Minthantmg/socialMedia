@@ -23,6 +23,7 @@ const userSchema = new mongoose.Schema({
     name : String,
     email : String,
     password : String,
+    verified : Boolean,
 });
 
 const postSchema = new mongoose.Schema({

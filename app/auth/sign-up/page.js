@@ -2,12 +2,15 @@
 import React, {useState} from 'react';
 import {useRouter} from "next/navigation";
 import {useUser} from "@/hooks/useUser";
+import Image from "next/image";
+import gif from '../../../public/laptop.jpg'
 
 const Login = () => {
     const router = useRouter();
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [verified, setVerified] = useState(false);
     const [emailError, setEmailError] = useState('');
     const [showError, setShowError] = useState(false);
     const [errorMsg, setErrorMsg] = useState(false);
@@ -16,7 +19,6 @@ const Login = () => {
     const {useGetUsers} = useUser()
     const {mutateAsync: createUser} = useUserMutation()
     const {data: users} = useGetUsers()
-    console.log(users)
 
     const isValidEmail = (email) => {
         const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -40,13 +42,14 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        sessionStorage.setItem('email',email)
         if (username && email && password && !emailError && !showError && !errorMsg) {
             try {
-                await createUser({name: username, email, password});
+                await createUser({name: username, email, password,verified});
                 setUsername('');
                 setEmail('');
                 setPassword('');
-                router.push('sign-in');
+                router.push('/auth/email-confirm');
             } catch (error) {
                 setShowError(true);
                 setErrorMsg(true)
@@ -77,6 +80,9 @@ const Login = () => {
             }
             <div className="flex sm:mr-80 sm:ml-80 sm:mt-32 sm:mb-32 shadow-lg">
                 <div className="w-1/2">
+                    {/*<div className="flex justify-center items-center h-full bg-gray-100">*/}
+                    {/*    <Image src={gif} alt="" className="w-full h-full"/>*/}
+                    {/*</div>*/}
                 </div>
                 <form method="POST" className="sm:w-1/2 bg-white" onSubmit={handleSubmit}>
                     <div className="font-bold sm:text-3xl sm:pt-20 sm:ml-10 font-sans">
