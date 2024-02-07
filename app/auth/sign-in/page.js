@@ -1,12 +1,23 @@
-import React from 'react';
+'use client'
+import React, {useEffect} from 'react';
+import {useRouter} from "next/navigation";
 
 const Page = () => {
+    const router = useRouter()
+    const gotoSignUp = () => {
+        router.push('/auth/sign-up')
+    }
+
+    useEffect(() => {
+            router.prefetch('auth/sign-up')
+        }, []
+    )
     return (
         <div>
-            <div className="flex sm:mr-80 sm:ml-80 sm:mt-32 sm:mb-32">
-                <div className="w-1/2 shadow-lg rounded-l-lg">
+            <div className="flex sm:mr-80 sm:ml-80 sm:mt-32 sm:mb-32 shadow-lg">
+                <div className="w-1/2">
                 </div>
-                <div className="w-1/2 shadow-lg pb-32 rounded-r-lg">
+                <div className="w-1/2 pb-32">
                     <div className="font-bold sm:text-3xl sm:pt-28 sm:ml-10 font-sans">
                         Welcome back!
                     </div>
@@ -35,6 +46,9 @@ const Page = () => {
                         <div
                             className="w-full bg-black mt-5 py-2 rounded-full text-center flex justify-center items-center">
                             <button className="rounded-sm font-bold text-white">Login</button>
+                        </div>
+                        <div className="text-sm sm:mt-10 flex justify-center items-center">
+                            Didn't have account? <span className="sm:ml-2 underline hover:text-blue-600 cursor-pointer font-bold" onClick={gotoSignUp}>Create account</span>
                         </div>
                     </div>
                 </div>

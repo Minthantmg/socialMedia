@@ -5,7 +5,7 @@ import {useRouter} from "next/navigation";
 const Home = () => {
     const router = useRouter()
     const gotoLogin = () => {
-        router.push('auth/sign-up')
+        router.push('auth/sign-in')
     }
     return (
         <div>
