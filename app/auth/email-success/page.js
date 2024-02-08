@@ -17,6 +17,7 @@ const Page = () => {
         if (users) {
             const foundUser = users.find((user) => user.email === userEmail);
             setMatchingUser(foundUser);
+            console.log(matchingUser)
         }
     }, [users, userEmail]);
     const gotoLogin = () => {
