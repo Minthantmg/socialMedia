@@ -4,10 +4,15 @@ const express = require("express");
 const dbURI = "mongodb+srv://kei94:kei94@cluster0.w6setwz.mongodb.net/test?retryWrites=true&w=majority";
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const nodemailer = require("nodemailer");
 const app = express()
 app.use(bodyParser.json({ limit: '100mb' }));
 app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
 app.use(cors())
+
+const emailUsername = 'minthant180@gmail.com';
+const emailPassword = 'taea ndwl anfv uddj';
+const redirectUrl = 'http://localhost:3000/auth/email-success';
 
 const port = 8000;
 mongoose
@@ -33,6 +38,31 @@ const postSchema = new mongoose.Schema({
 const User = mongoose.model("User", userSchema);
 const Post = mongoose.model("Post", postSchema);
 
+const sendVerificationEmail = async (email) => {
+    try {
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com', // Replace with your email provider's SMTP host
+            port: 587,
+            secure: false, // Use `true` for TLS, `false` for STARTTLS
+            auth: {
+                user: emailUsername,
+                pass: emailPassword,
+            },
+        });
+
+        const mailOptions = {
+            from: 'no-reply@your-website.com', // Your sender email address
+            to: email,
+            subject: 'Verify Your Account',
+            text: `Click here to verify your account: ${redirectUrl}`,
+        };
+
+        await transporter.sendMail(mailOptions);
+        console.log('Verification email sent to:', email);
+    } catch (error) {
+        console.error('Error sending verification email:', error);
+    }
+};
 app.post('/posts', async (req, res) => {
     try {
         const postData = req.body;
@@ -50,6 +80,7 @@ app.post('/users', async (req, res) => {
         console.log("USER DATA",userData)
         const newUser = new User(userData);
         await newUser.save();
+        await sendVerificationEmail(newUser.email);
         res.status(201).json(newUser);
     } catch (error) {
         res.status(500).json({ error: 'Failed to create user' });

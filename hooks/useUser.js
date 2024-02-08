@@ -5,13 +5,19 @@ const useUserMutation = () =>{
     return useMutation({
         mutationKey: ['post', 'users'],
         mutationFn: createUser,
+        onError: (error) => {
+            console.error("Error creating user:", error)
+        },
     })
 }
 
 const useGetUsers = () => {
     return useQuery({
         queryKey: ['get','users'],
-        queryFn: getUsers
+        queryFn: getUsers,
+        onError: (error) => {
+            console.error("Error fetching users:", error)
+        },
     })
 }
 

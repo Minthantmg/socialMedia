@@ -1,12 +1,24 @@
 'use client'
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Image from "next/image";
 import email from '../../../public/email.png'
 import {useRouter} from "next/navigation";
+import {useUser} from "@/hooks/useUser";
 
 const Page = () => {
     const router = useRouter()
+    const userEmail = sessionStorage.getItem('email')
+    const [matchingUser, setMatchingUser] = useState(null)
 
+    const {useGetUsers} = useUser()
+    const {data: users} = useGetUsers()
+
+    useEffect(() => {
+        if (users) {
+            const foundUser = users.find((user) => user.email === userEmail);
+            setMatchingUser(foundUser);
+        }
+    }, [users, userEmail]);
     const gotoLogin = () => {
         router.push('/auth/sign-in')
     }
@@ -14,7 +26,7 @@ const Page = () => {
         <div>
             <div className="flex flex-col justify-center items-center h-screen">
                 <div>
-                    <Image src={email} alt="" className="w-48 h-48"/>
+                    <Image src={email} alt="" className="w-48 h-48" />
                 </div>
                 <div className="sm:mt-6 font-bold text-lg text-blue-400">
                     Congratulations !

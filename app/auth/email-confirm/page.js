@@ -28,7 +28,7 @@ const Page = () => {
                 <div className="font-bold sm:mt-10">
                     Didn't received the verification email?
                 </div>
-                <div className="text-blue-400 font-bold cursor-pointer" onClick={handleResendEmailClick}>
+                <div className="text-blue-400 font-bold cursor-pointer">
                     Resend email
                 </div>
                 <div onClick={temgotoSuccess}>
