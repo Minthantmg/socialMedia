@@ -6,6 +6,7 @@ import {useRouter} from "next/navigation";
 const Page = () => {
     const router = useRouter()
     const email = sessionStorage.getItem('email')
+
     const temgotoSuccess = () => {
         router.push('/auth/email-success')
     }
@@ -27,7 +28,7 @@ const Page = () => {
                 <div className="font-bold sm:mt-10">
                     Didn't received the verification email?
                 </div>
-                <div className="text-blue-400 font-bold cursor-pointer">
+                <div className="text-blue-400 font-bold cursor-pointer" onClick={handleResendEmailClick}>
                     Resend email
                 </div>
                 <div onClick={temgotoSuccess}>
