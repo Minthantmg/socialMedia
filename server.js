@@ -14,7 +14,7 @@ const emailUsername = 'minthant180@gmail.com';
 const emailPassword = 'taea ndwl anfv uddj';
 const redirectUrl = 'http://localhost:3000/auth/email-success';
 
-const port = 8000;
+const port = 8002;
 mongoose
     .connect(dbURI)
     .then(() => {
@@ -94,6 +94,21 @@ app.get("/users", async (req, res) => {
         res.json(users);
     } catch (error) {
         res.status(500).json({ error: "Error retrieving users" });
+    }
+});
+
+app.put("/users/:userEmail", async (req, res) => {
+    const userEmail = req.params.userEmail;
+    const updateData = req.body;
+    try {
+        const updatedPost = await Post.findByIdAndUpdate({ _id: userEmail }, updateData, { new: true });
+        if (!updatedPost) {
+            return res.status(404).json({ error: "Post not found" });
+        }
+        res.send({message:"get specific user success",updatedPost})
+    } catch (error) {
+        console.error("Error updating post:", error);
+        res.status(500).json({ error: "Error updating post" });
     }
 });
 app.listen(port,()=>{
