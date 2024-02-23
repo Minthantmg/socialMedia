@@ -18,3 +18,12 @@ export const getUsers = async () => {
         throw e
     }
 }
+
+export const updateUserVerified = async (name) => {
+    try {
+        const res = await axiosInstance.put(`/users/${name}`)
+        return res.data
+    }catch (e){
+        throw e
+    }
+}
