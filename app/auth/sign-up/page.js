@@ -17,8 +17,10 @@ const Login = () => {
 
     const {useUserMutation} = useUser()
     const {useGetUsers} = useUser()
-    const {mutateAsync: createUser} = useUserMutation()
+    const {mutateAsync: createUser,isPending} = useUserMutation()
     const {data: users} = useGetUsers()
+
+    console.log("loading",isPending)
 
     const isValidEmail = (email) => {
         const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -30,22 +32,24 @@ const Login = () => {
         setEmail(newEmail);
         setEmailError(isValidEmail(newEmail) ? '' : 'Please enter a valid email address.');
 
-        const emailExists = users.some((user) => user.email === newEmail);
-        if (emailExists) {
-            setShowError(true);
-            setErrorMsg(true);
-        } else {
-            setShowError(false);
-            setErrorMsg(false);
+        if (users) { // Check if users is available before using it
+            const emailExists = users.some((user) => user.email === newEmail);
+            if (emailExists) {
+                setShowError(true);
+                setErrorMsg(true);
+            } else {
+                setShowError(false);
+                setErrorMsg(false);
+            }
         }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        sessionStorage.setItem('email',email)
+        sessionStorage.setItem('email', email)
         if (username && email && password && !emailError && !showError && !errorMsg) {
             try {
-                await createUser({name: username, email, password,verified});
+                await createUser({name: username, email, password, verified});
                 setUsername('');
                 setEmail('');
                 setPassword('');
@@ -145,7 +149,13 @@ const Login = () => {
                         </div>
                         <div className="flex justify-center items-center mt-10">
                             <button className="sm:w-32 bg-black py-2 rounded-full text-center font-bold text-white">
-                                Sign Up
+                                {isPending ?
+                                    <span className="loading loading-spinner loading-md"></span>
+                                    :
+                                    <div>
+                                        SignUp
+                                    </div>
+                                }
                             </button>
                         </div>
                     </div>
