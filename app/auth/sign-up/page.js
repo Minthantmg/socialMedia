@@ -46,14 +46,13 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        sessionStorage.setItem('email', email)
         if (username && email && password && !emailError && !showError && !errorMsg) {
             try {
                 await createUser({name: username, email, password, verified});
                 setUsername('');
                 setEmail('');
                 setPassword('');
-                router.push('/auth/email-confirm');
+                router.push('/auth/sign-in');
             } catch (error) {
                 setShowError(true);
                 setErrorMsg(true)
@@ -147,10 +146,10 @@ const Login = () => {
                                 Password
                             </label>
                         </div>
-                        <div className="flex justify-center items-center mt-10">
-                            <button className="sm:w-32 bg-black py-2 rounded-full text-center font-bold text-white">
+                        <div className="flex-center mt-10">
+                            <button className="custom-btn bg-black text-white cursor-pointer font-bold">
                                 {isPending ?
-                                    <span className="loading loading-spinner loading-md"></span>
+                                    <span className="loading loading-spinner loading-sm"></span>
                                     :
                                     <div>
                                         SignUp
